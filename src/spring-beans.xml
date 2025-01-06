@@ -11,8 +11,20 @@
 	<!-- beans -->
 	
 	<bean id="bananaBean" class="sud.learn.beans.Banana"></bean>
-	<bean id="fruitBean" class="sud.learn.beans.Orange"></bean>
 	
+	<!-- for constructor injection -->
+	<bean id="fruitBean" class="sud.learn.beans.Orange">
+		<constructor-arg name="fruitName" value="RED-ORANGE" type="String"/>
+		<constructor-arg name="fruitId" value="1001" type="int"/>
+		<constructor-arg name="withSeeds" value="TRUE" type="boolean"/>
+    </bean>
+    
+    <!-- for setter injection -->
+    <bean id="appleBean" class="sud.learn.beans.Apple">
+    	<property name="fruitName" value="Green-Apple"></property>
+    	<property name="fruitId" value="1002"></property>
+    	<property name="withSeeds" value="TRUE"></property>
+    </bean>
 	
 
 </beans>

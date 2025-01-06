@@ -3,6 +3,7 @@ package sud.learn;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import sud.learn.beans.Apple;
 import sud.learn.beans.Banana;
 import sud.learn.beans.FruitInterface;
 
@@ -14,15 +15,18 @@ public class SpringCoreApplication {
 
 		// Calling Class Method
 		Banana banana = context.getBean("bananaBean", Banana.class);
-		System.out.println("Fruit Color  : " + banana.getFruitColor());
+		System.out.println(" BANANA Fruit Color  : " + banana.getFruitColor());
 
-		// Calling Method via Interface - 
-		// This will help creating objects and calling methods of any implementation class with
-		// no change in java class but only changing name of Class in spring-config.xml
+		/* Calling Method via Interface - helps calling methods of any implementation class with 
+		 * no change in java class but only changing name of Class in spring-config.xml */
+		
+		// constructor injection
 		FruitInterface fruit = context.getBean("fruitBean", FruitInterface.class);
-		System.out.println("Fruit Name : " + fruit.getFruitName());
-		
-		
+		fruit.printFruitDetails();
+
+		// setter injection
+		Apple apple = context.getBean("appleBean", Apple.class);
+		apple.printFruitDetails();
 
 	}
 
