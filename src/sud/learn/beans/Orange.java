@@ -1,18 +1,21 @@
 package sud.learn.beans;
 
+import sud.learn.service.FruitService;
+
 public class Orange implements FruitInterface{
 	
 	public String fruitName;
 	public int fruitId;
 	public boolean withSeeds;
+	private FruitService fruitService;
 	
 	
-	// Required for Constructor-based Dependency Injection
-	public Orange(String fruitName, int fruitId, boolean withSeeds) {
+	// Required for Constructor-based Dependency Injection with reference class obj 
+	public Orange(String fruitName, int fruitId, boolean withSeeds, FruitService fruitService) {
 		this.fruitName = fruitName;
 		this.fruitId = fruitId;
 		this.withSeeds = withSeeds;
-		System.out.println("Orange constructor called ... ");
+		this.fruitService = fruitService;
 	}
 
 	@Override
@@ -30,5 +33,9 @@ public class Orange implements FruitInterface{
 		System.out.println(" Fruit Details : \n Namae: " + this.fruitName +"  , ID : "+ this.fruitId +"  , Seed : "+ this.withSeeds );
 	}
 	
-
+	public void getFruitPrice() {
+		System.out.println(" Calling via reference object ...");
+		fruitService.getFruitPrice();
+	}
+	
 }

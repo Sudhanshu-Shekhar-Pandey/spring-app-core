@@ -14,13 +14,13 @@ Our goal is to achieve loose coupling, and make our code change minimum. Any new
 **How to tell Spring which class objects needs to be created ?**
 We can tell spring in form of configuration using - **1.** xml file, **2.** Annotations. 
 
-**IoC : Inversion of Control -** A principle - Instead of user having control of Object creation, give it to Spring. Hence, control is inverted for user.
+**IoC : Inversion of Control -** A principle - Instead of user having control of Object creation, give it to Spring. Hence, control is inverted for user.  
 **DI : Dependency Injection -** Implementation of IoC - To achieve loose coupling, Spring container (which lays inside JVM) help manage object lifecycle (create to destroy) inside container and inject them in the class wherever needed.
 
-**Types of Dependency Injection :**
-		**1. Constructor Injection -** using constructor to set variable values (properties). Class should have a constructor. [Recommended].
-		**2. Setter Injection -** Using getter setters to set variable values. Class should have setters. [only for optional dependencies].
-		**3. Field Injection -** Using Interface Reference [Not Recommended].
+**Types of Dependency Injection :**  
+		**1. Constructor Injection -** using constructor to set variable values (properties). Class should have a constructor. [Recommended].  
+		**2. Setter Injection -** Using getter setters to set variable values. Class should have setters. [only for optional dependencies].  
+		**3. Field Injection -** Using Interface Reference [Not Recommended].  
 
 <br>
 In Java class main() method - 
@@ -40,22 +40,58 @@ In Java class main() method -
 <br>
 In Spring-config.xml file -
 
-	**1. Constructor Injection -** 
+	1. Constructor Injection ---  
     	<bean id="beanNameObjRef" class="class.fully-qualified.name">
     		<constructor-arg name="id" value="1001" type="int"/> 
     		<constructor-arg name="anotherObj" ref="classRefBeanObj"/>
     	</bean>
     	<bean id="classRefBeanObj" class="examples.AnotherBean"/>
+    	
+    	<!-- Other ways for reference objects/dependencies --> 
+    	<bean id="exampleBean" class="examples.ExampleBean">
+			<!-- constructor injection using the nested ref element -->
+			<constructor-arg>
+				<ref bean="anotherExampleBean"/>
+			</constructor-arg>
+		
+			<!-- constructor injection using the neater ref attribute -->
+			<constructor-arg ref="yetAnotherBean"/>
+			<constructor-arg type="int" value="1"/>
+		</bean>
+		<bean id="anotherExampleBean" class="examples.AnotherBean"/>
+		<bean id="yetAnotherBean" class="examples.YetAnotherBean"/>
+		
+    # You can also use constructor injection in config.xml using [value], [type + value], [name + value], [index + value],  
+      [name + value + type] to resolving any ambiguity if exist while initializing constructor, eg- two var with same data type.  
+    # similarly for reference objs, we can use <constructor-arg ref="anotherBean"/> inside <bean> or direct initialize it   
+      as <bean id="anotherBean" class="examples.AnotherBean"/> .
 
-    	# You can also use constructor injection in config.xml using [value], [type + value], [name + value], [index + value], [name + value + type] to resolving any ambiguity if exist while initializing constructor, eg- two var with same data type. 
-    	# similarly for reference objs, we can use <constructor-arg ref="anotherBean"/> inside <bean> or direct initialize it as <bean id="anotherBean" class="examples.AnotherBean"/> .
 
-
-	2. Setter Injection - 
+	2. Setter Injection ---   
 		<bean id="beanNameObjRef" class="class.fully-qualified.name">
-    		<property name="" value=""/>
+    		<property name="" value=""/> 
     		<property name="scienceObj" ref="classRefBeanObj" />
     	</bean>
+    	<bean id="classRefBeanObj" class="examples.RefBeanObjClass"/>
+
+    	<!-- Other ways for reference objects/dependencies --> 
+    	<bean id="exampleBean" class="examples.ExampleBean">
+			<!-- method 1 -->
+			<property name="justBean">
+				<bean class=examplee.justBeanExample"/>
+			</property>
+
+			<!-- method 2 -->
+			<property name="beanOne">
+				<ref bean="anotherExampleBean"/>
+			</property>
+		
+			<!-- setter injection using a neater way -->
+			<property name="beanTwo" ref="yetAnotherBean"/>
+			<property name="integerProperty" value="1"/>
+		</bean>
+		<bean id="anotherExampleBean" class="examples.AnotherBean"/>
+		<bean id="yetAnotherBean" class="examples.YetAnotherBean"/>
     
 
  - We can mix constructor-based and setter-based DIs. Rule of thumb is to use constructors for mandatory dependencies and setter methods or configuration methods for optional dependencies.
@@ -89,27 +125,35 @@ In Spring-config.xml file -
 	    This will be added to Project Class path. 
 	3. Create spring-config.xml file in root folder or classpath of application (recommended). Creating anywhere else is also possible but that will create coupling with that location.
 	4. Create beans, and a class with main method. Configure xml for the beans. 
-	5. Run the Application.
-	6. **Constructor Injection -** 
-	7. Add private dependencies in Orange.class and add public constructor to initialize them. 
-	8. Define constructor dependencies in config file - 
-		*<!-- for constructor injection -->
+	5. ## Run the Application.
+	6. Constructor Injection -------
+		Add private dependencies in Orange.class and add public constructor to initialize them. 
+	7. Define constructor dependencies in config file - 
 		<bean id="fruitBean" class="sud.learn.beans.Orange">
 			<constructor-arg name="fruitName" value="RED-ORANGE" type="String"/>
 			<constructor-arg name="fruitId" value="1001" type="int"/>
 			<constructor-arg name="withSeeds" value="TRUE" type="boolean"/>
-    </bean>*
-	9. Instantiate Orange class and print all the properties. 
-    	*FruitInterface fruit = context.getBean("fruitBean", FruitInterface.class);
-		  fruit.printFruitDetails();*
-	10. Setter Injection - 
+		</bean> 
+	8. Instantiate Orange class and print all the properties. 
+    	FruitInterface fruit = context.getBean("fruitBean", FruitInterface.class);
+    	fruit.printFruitDetails();
+	9. Setter Injection ----------- 
 	    Add a new Apple.class with properties and add setters for them. 
-	11. Define setter dependencies in config file -
-	  <!-- for setter injection -->
-    <bean id="appleBean" class="sud.learn.beans.Apple">
-    	<property name="fruitName" value="Green-Apple"></property>
-    	<property name="fruitId" value="1002"></property>
-    	<property name="withSeeds" value="TRUE"></property>
-    </bean>
-	12. Instantiate Orange class and print all its properties.
-	13. **Run the Application.**
+	10. Define setter dependencies in config file -
+		<bean id="appleBean" class="sud.learn.beans.Apple">
+			<property name="fruitName" value="Green-Apple"></property>
+			<property name="fruitId" value="1002"></property>
+			<property name="withSeeds" value="TRUE"></property>
+		</bean>
+	11. Instantiate Orange class and print all its properties.
+	12. ## Run the Application.
+	13. ## Dependency Injection with reference -->>
+		Add FruitService Interface with impl class in a new package 'service'.
+	14. Create a new 'spring-service.xml' config file for service class. Register bean of FruitService in that new xml config file. 
+	15. Create ref of FruitService in Apple.class with setter and in Orange.class with constructor; and call service methods. 
+	16. Add a property with ref for FruitService in Apple bean tag of 'spring-bean.xml' config. 
+    	Also add a constructor-arg tag with ref for FruitService in Orange bean tag in same file. 
+    	# Note that bean-ref and actual-bean is defined in two different xml config files. This can be achieved.
+	17. Add both the config to main methods and call bean methods - 
+    	ApplicationContext context = new ClassPathXmlApplicationContext("spring-beans.xml", "spring-service.xml" );
+	18. ## Run the Application ------->

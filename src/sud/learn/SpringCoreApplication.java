@@ -11,7 +11,7 @@ public class SpringCoreApplication {
 
 	public static void main(String[] args) {
 
-		ApplicationContext context = new ClassPathXmlApplicationContext("spring-beans.xml");
+		ApplicationContext context = new ClassPathXmlApplicationContext("spring-beans.xml", "spring-service.xml");
 
 		// Calling Class Method
 		Banana banana = context.getBean("bananaBean", Banana.class);
@@ -20,13 +20,15 @@ public class SpringCoreApplication {
 		/* Calling Method via Interface - helps calling methods of any implementation class with 
 		 * no change in java class but only changing name of Class in spring-config.xml */
 		
-		// constructor injection
+		// constructor injection - with obj reference call
 		FruitInterface fruit = context.getBean("fruitBean", FruitInterface.class);
 		fruit.printFruitDetails();
+		fruit.getFruitPrice();
 
-		// setter injection
+		// setter injection - with obj reference call 
 		Apple apple = context.getBean("appleBean", Apple.class);
 		apple.printFruitDetails();
+		apple.getFruitPrice();
 
 	}
 

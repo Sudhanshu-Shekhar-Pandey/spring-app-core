@@ -9,22 +9,27 @@
 	</bean> -->
 
 	<!-- beans -->
-	
 	<bean id="bananaBean" class="sud.learn.beans.Banana"></bean>
 	
-	<!-- for constructor injection -->
+	<!-- constructor injection with reference -->
 	<bean id="fruitBean" class="sud.learn.beans.Orange">
 		<constructor-arg name="fruitName" value="RED-ORANGE" type="String"/>
 		<constructor-arg name="fruitId" value="1001" type="int"/>
 		<constructor-arg name="withSeeds" value="TRUE" type="boolean"/>
+		<constructor-arg name="fruitService" ref="fruitService"/>
     </bean>
     
-    <!-- for setter injection -->
+    <!-- setter injection with reference -->
     <bean id="appleBean" class="sud.learn.beans.Apple">
     	<property name="fruitName" value="Green-Apple"></property>
     	<property name="fruitId" value="1002"></property>
     	<property name="withSeeds" value="TRUE"></property>
+    	<property name="fruitService" ref="fruitService"/>
     </bean>
+    <!-- Bean reference is defined in another config xml -
+    <bean id="fruitService" class="sud.learn.service.FruitService"/> -->
+    
+    
 	
 
 </beans>
