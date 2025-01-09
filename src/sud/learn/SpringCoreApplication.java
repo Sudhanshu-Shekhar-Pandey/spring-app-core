@@ -6,6 +6,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import sud.learn.beans.Apple;
 import sud.learn.beans.Banana;
 import sud.learn.beans.FruitInterface;
+import sud.learn.service.FruitServiceImpl;
 
 public class SpringCoreApplication {
 
@@ -29,6 +30,12 @@ public class SpringCoreApplication {
 		Apple apple = context.getBean("appleBean", Apple.class);
 		apple.printFruitDetails();
 		apple.getFruitPrice();
+		
+		// -- 
+		System.out.println(" \n \n ");
+		FruitServiceImpl serviceImpl = context.getBean("fruitService", FruitServiceImpl.class);
+		serviceImpl.test();
+		
 
 	}
 

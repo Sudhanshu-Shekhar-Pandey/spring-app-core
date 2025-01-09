@@ -9,8 +9,24 @@
 	</bean> -->
 	
 	<!-- service -->
+	<!--  simple bean definition  -->
+	<!-- <bean id="fruitService" class="sud.learn.service.FruitServiceImpl"></bean> -->
 	
-	<bean id="fruitService" class="sud.learn.service.FruitServiceImpl"></bean>
+	<!--  using 'depends-on'  -->
+	<bean id="fruitService" class="sud.learn.service.FruitServiceImpl" depends-on="priceService">
+		<property name="priceService" ref="priceService" />
+	</bean>
+	
+	<!--  using 'autowire=byName'  -->
+	<!-- <bean id="fruitService" class="sud.learn.service.FruitServiceImpl" autowire="byName"/> -->
+	
+	<!--  using 'autowire=byType'  -->
+	<!-- <bean id="fruitService" class="sud.learn.service.FruitServiceImpl" autowire="byType"/> -->
+	
+	<!--  using 'autowire=constructor',  This requires a constructor -->
+	<!-- <bean id="fruitService" class="sud.learn.service.FruitServiceImpl" autowire="constructor"/> -->
+	
+	<bean id="priceService" class="sud.learn.service.PriceService"></bean>
 	
 
 </beans>

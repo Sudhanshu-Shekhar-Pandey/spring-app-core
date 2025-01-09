@@ -101,6 +101,34 @@ In Spring-config.xml file -
  *Not recommended solution* - one of the class should be configured by setters injection. Or use setter injection in both classes.
 
 
+**Other ways of Setter/Constructor Injection (for small projects with less Classes)** - 
+
+	a. Dependency Injection using `depends-on` tag - 
+		<bean id="beanOne" class="ExampleBean" depends-on="manager,accountDao">
+			<property name="manager" ref="manager" />
+		</bean>
+		<bean id="manager" class="ManagerBean" />
+		<bean id="accountDao" class="x.y.jdbc.JdbcAccountDao" />
+
+
+	b. Dependency Injection using `autowire` tag - 
+		In XML - 
+		<bean id="refObjA" class="class.fully-qualified.nameA">
+		<bean id="someBean" class="class.fully-qualified.SomeBean" autowire="byName">
+		or
+		<bean id="someObj" class="class.fully-qualified.nameA">
+		<bean id="refObjB" class="class.fully-qualified.nameB" autowire="byType">
+		or 
+		<bean id="someObj" class="class.fully-qualified.nameA">
+		<bean id="refObjB" class="class.fully-qualified.nameB" autowire="constructor">
+
+
+	# Limitations and Disadvantages of autowiring:
+	- Dependencies added explicitely as property and constructor-arg settings will always override autowiring. 
+	- You cannot autowire simple properties such as primitives, Strings, and arrays of such simple properties. 
+	- If there are multiple bean defined (within the container) and those match the type specified by the setter method or constructor argument to be autowired. This may leads to exception.
+	  To excluding a Bean from Autowiring set the autowire-candidate attribute of the <bean/> element to false. 
+
 	
 ***
 
@@ -157,3 +185,13 @@ In Spring-config.xml file -
 	17. Add both the config to main methods and call bean methods - 
     	ApplicationContext context = new ClassPathXmlApplicationContext("spring-beans.xml", "spring-service.xml" );
 	18. ## Run the Application ------->
+	19. ## Other ways of Dependency Injection - `depends-on`, `autowire`   -->>
+    	Create a new 'PriceService.class' which will provide cost price and selling price of fruit. 
+    20. Add its dependecy in 'FruitServiceImpl.class' along with setters and constructor (one of them active at a time).
+    21. Call 'priceService.getCostPrice()'' from inside of any method of 'FruitServiceImpl.class'. Also write a test method. 
+    22. Define 'PriceService.class' bean in `spring-service.xml`. 
+    23. Add a property for PriceService in  `FruitServiceImpl` bean tag using `depends-on`. 
+    24. Test your code - 
+    25. Modify your xml to inject dependency 'autowire=byName' , 'autowire=byType' , 'autowire=constructor' . 
+    26. Call any method of Service Class in main class. 
+    27. ## Run the Application ------->
