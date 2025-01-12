@@ -6,13 +6,14 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import sud.learn.beans.Apple;
 import sud.learn.beans.Banana;
 import sud.learn.beans.FruitInterface;
+import sud.learn.dao.GetFruitDetailsDao;
 import sud.learn.service.FruitServiceImpl;
 
 public class SpringCoreApplication {
 
 	public static void main(String[] args) {
 
-		ApplicationContext context = new ClassPathXmlApplicationContext("spring-beans.xml", "spring-service.xml");
+		ApplicationContext context = new ClassPathXmlApplicationContext("spring-beans.xml", "spring-service.xml", "spring-dao.xml");
 
 		// Calling Class Method
 		Banana banana = context.getBean("bananaBean", Banana.class);
@@ -32,9 +33,13 @@ public class SpringCoreApplication {
 		apple.getFruitPrice();
 		
 		// -- 
-		System.out.println(" \n \n ");
 		FruitServiceImpl serviceImpl = context.getBean("fruitService", FruitServiceImpl.class);
 		serviceImpl.test();
+		
+		
+		System.out.println(" \n --------------------- ENABLING ANNOTATION ------------------------------ \n ");
+		GetFruitDetailsDao fruitDetails  =  context.getBean("fruitDAO", GetFruitDetailsDao.class);
+		fruitDetails.getFruitDetails();
 		
 
 	}

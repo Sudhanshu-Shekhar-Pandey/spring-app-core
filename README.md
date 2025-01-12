@@ -187,11 +187,33 @@ In Spring-config.xml file -
 	18. ## Run the Application ------->
 	19. ## Other ways of Dependency Injection - `depends-on`, `autowire`   -->>
     	Create a new 'PriceService.class' which will provide cost price and selling price of fruit. 
-    20. Add its dependecy in 'FruitServiceImpl.class' along with setters and constructor (one of them active at a time).
+    20. Add its dependency in 'FruitServiceImpl.class' along with setters and constructor (one of them active at a time).
     21. Call 'priceService.getCostPrice()'' from inside of any method of 'FruitServiceImpl.class'. Also write a test method. 
     22. Define 'PriceService.class' bean in `spring-service.xml`. 
     23. Add a property for PriceService in  `FruitServiceImpl` bean tag using `depends-on`. 
     24. Test your code - 
     25. Modify your xml to inject dependency 'autowire=byName' , 'autowire=byType' , 'autowire=constructor' . 
     26. Call any method of Service Class in main class. 
-    27. ## Run the Application ------->
+    27. ## Run the Application ------->    
+    28. Replacing with @autowire annotation -
+    	Add context schema in xml - 
+    	    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd  
+    	    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"   
+    29. Enable annotations in xml. Add tag to enable annotation configuration -   
+    	    <context:annotation-config/>
+    30. Create new interface in DAO package - `GetDBConnections.class` with implementation class as `GetMySQLConnection.class`. 
+    31. Create a new class `GetFruitDetailsDao.class` with a ref of the interface and setters. 
+    32. Define the beans in xml with `id` and `class` with autowire="byType". 
+    		<bean id="fruitDAO" class="sud.learn.dao.GetFruitDetailsDao" autowire="byType"></bean>
+    	 	<bean id="mysqlConnection" class="sud.learn.dao.GetMySQLConnection"></bean>
+    33. Test your code by calling a method of `GetFruitDetailsDao.class` which is then calling a method of `GetMySQLConnection.class`. 
+    34. Now, replace xml tag <autowire="byType"> + <setter in java> ---(with)-->  
+    	@Autowired (org.springframework.beans.factory.annotation.Autowired) on reference var of `GetFruitDetailsDao.class`.  
+    35. Now, add another implementation class `GetPostGresConnection.class` and define bean in xml.  
+    	    <bean id="postgresConnection" class="sud.learn.dao.GetPostGresConnection"></bean>
+    36. Test your code to get exception - "expected single matching bean but found 2: mysqlConnection,postgresConnection".  
+    	Reason - @autowire annotation tries to resolved dependency `byType` if not found then `byName`. IOC will not be able to understand which class to  
+    	instantiate if multiple bean with same type found. Hence exception. Note that we are using interface ref to call the method.  
+    37. Use @Qualifier("varName") to create required bean instance. Eg - `@Qualifier("postgresConnection")`  
+    38. ## Run the Application ------->  
+    
