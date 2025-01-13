@@ -129,7 +129,53 @@ In Spring-config.xml file -
 	- If there are multiple bean defined (within the container) and those match the type specified by the setter method or constructor argument to be autowired. This may leads to exception.
 	  To excluding a Bean from Autowiring set the autowire-candidate attribute of the <bean/> element to false. 
 
+
+
+## Dependency Injection using `Annotations` (removing autowire from XML) - 
+ To enable annotations, we need to add context schema xsd in config.xml file and add tag to enable annotation configuration.  
+     
+     <?xml version="1.0" encoding="UTF-8"?>
+		<beans xmlns="http://www.springframework.org/schema/beans"
+		   	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		    xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="
+		        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"> 
+			 	<!-- bean definitions here -->
+
+			 	<!--  enable annotation configuration  -->
+			 	<context:annonation-config/>
+			 	. . . 
+		</beans>
+
+		
+Priority order to resolved dependency for @Autowire annotation is `byType` and then `byName`. 
 	
+1. We can remove `autowire="byType"` (or others) from xml and replace it with `@Autowire` on parameterized constructor in class (applicable for constructor injection).  
+2. Similarly, same can be used on setter for setter injection. You can even use it on the property and get rid of setters.  
+3. In case of  ***(a)*** multiple ref Objects of same type with different name; or    ***(b)*** having interface reference with multiple implementation class.  Here, `byName` will fail and `byType` will not able to choose which ref Obj to instantiate (with exception - `expected single matching bean but found 2`).    
+To resolve this, use @Qualifier("refObjIDInXML") over ref variable.
+
+
+
+## Dependency Injection using `Annotations` (removing bean definition from XML) -
+To remove bean tag from XML we need to replace it with `@Components` annotation over bean class. Dependencies reference can be injected using `@Autowired` on setter method, or directly on property in that case setter method is not required.
+
+	XML equivalent -
+		<bean id="beanA" class="class.fully-qualified.BeanA">
+
+	Annotation equivalent- 
+		@Components
+		public class BeanA {...}
+
+		where id=class name in camelCase. Or you can explicitely provide id as @Components("beanA")
+
+	We also have to tell Spring where to scan for beans (here components), ie the packages to scan (currently spring is still using XML) -  
+		<context:component-scan base-package="sud.learn.spring.bean", "sud.learn.spring.services" />  
+		
+	The use of <context:component-scan> implicitly enables the functionality of <context:annotation-config>, and not to be included. 
+
+
+
 ***
 
 # Source Code - 
@@ -216,4 +262,22 @@ In Spring-config.xml file -
     	instantiate if multiple bean with same type found. Hence exception. Note that we are using interface ref to call the method.  
     37. Use @Qualifier("varName") to create required bean instance. Eg - `@Qualifier("postgresConnection")`  
     38. ## Run the Application ------->  
+    39. ## Replacing bean definition from XML to annotations --> 
+    	Add component scan tag in xml and remove all the bean definitions. 
+    	<context:component-scan base-package="sud.learn.spring.services" />
+    40. Replace bean tags with equivalent annotations. 
+    	XML equivalent -
+			<bean id="fruitService" class="sud.learn.service.FruitServiceImpl"></bean>
+
+		Annotation equivalent- 
+			@Component
+			public class FruitServiceImpl{...}
+
+			where id=class name in camelCase. Or you can explicitely provide id as @Components("beanA")  
+
+    41. For injecting dependency, add @Autowired on property or use constructor. Setter method is not required if used over property. 
+			@Autowired
+			PriceService priceService;
+    42. Reference bean should also be made component using @Component. 
+    43. ## Run the Application -------> 
     

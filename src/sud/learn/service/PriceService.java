@@ -1,5 +1,8 @@
 package sud.learn.service;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class PriceService {
 	
 	public void getCostPrice() {

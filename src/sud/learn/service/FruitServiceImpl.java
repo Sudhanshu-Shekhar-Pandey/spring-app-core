@@ -1,7 +1,12 @@
 package sud.learn.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
 public class FruitServiceImpl implements FruitService{
 	
+	@Autowired
 	PriceService priceService;
 	
 	// constructor needed only for 'autowire=constructor'
@@ -9,9 +14,9 @@ public class FruitServiceImpl implements FruitService{
 //		this.priceService = priceService;
 //	}
 
-	public void setPriceService(PriceService priceService) {
-		this.priceService = priceService;
-	}
+//	public void setPriceService(PriceService priceService) {
+//		this.priceService = priceService;
+//	}
 
 	@Override
 	public void getFruitDetails() {

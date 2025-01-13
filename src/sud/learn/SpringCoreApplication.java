@@ -13,34 +13,43 @@ public class SpringCoreApplication {
 
 	public static void main(String[] args) {
 
-		ApplicationContext context = new ClassPathXmlApplicationContext("spring-beans.xml", "spring-service.xml", "spring-dao.xml");
-
-		// Calling Class Method
-		Banana banana = context.getBean("bananaBean", Banana.class);
-		System.out.println(" BANANA Fruit Color  : " + banana.getFruitColor());
-
-		/* Calling Method via Interface - helps calling methods of any implementation class with 
-		 * no change in java class but only changing name of Class in spring-config.xml */
+		/*
+		 * ApplicationContext context = new
+		 * ClassPathXmlApplicationContext("spring-beans.xml", "spring-service.xml");
+		 * 
+		 * // Calling Class Method Banana banana = context.getBean("bananaBean",
+		 * Banana.class); System.out.println(" BANANA Fruit Color  : " +
+		 * banana.getFruitColor());
+		 * 
+		 * Calling Method via Interface - helps calling methods of any implementation
+		 * class with no change in java class but only changing name of Class in
+		 * spring-config.xml
+		 * 
+		 * // constructor injection - with obj reference call FruitInterface fruit =
+		 * context.getBean("fruitBean", FruitInterface.class);
+		 * fruit.printFruitDetails(); fruit.getFruitPrice();
+		 * 
+		 * // setter injection - with obj reference call Apple apple =
+		 * context.getBean("appleBean", Apple.class); apple.printFruitDetails();
+		 * apple.getFruitPrice();
+		 * 
+		 * // -- FruitServiceImpl serviceImpl = context.getBean("fruitServiceImpl",
+		 * FruitServiceImpl.class); serviceImpl.test();
+		 * 
+		 * 
+		 * System.out.
+		 * println(" \n --------------------- ENABLING ANNOTATION ------------------------------ \n "
+		 * ); GetFruitDetailsDao fruitDetails = context.getBean("fruitDAO",
+		 * GetFruitDetailsDao.class); fruitDetails.getFruitDetails();
+		 * 
+		 * // Closing context ((ClassPathXmlApplicationContext)context).close();
+		 */
 		
-		// constructor injection - with obj reference call
-		FruitInterface fruit = context.getBean("fruitBean", FruitInterface.class);
-		fruit.printFruitDetails();
-		fruit.getFruitPrice();
-
-		// setter injection - with obj reference call 
-		Apple apple = context.getBean("appleBean", Apple.class);
-		apple.printFruitDetails();
-		apple.getFruitPrice();
-		
-		// -- 
-		FruitServiceImpl serviceImpl = context.getBean("fruitService", FruitServiceImpl.class);
+		System.out.println("Removing config from XML file ... ");
+		ApplicationContext context = new ClassPathXmlApplicationContext("spring-service.xml");
+		FruitServiceImpl serviceImpl = context.getBean("fruitServiceImpl", FruitServiceImpl.class);
 		serviceImpl.test();
-		
-		
-		System.out.println(" \n --------------------- ENABLING ANNOTATION ------------------------------ \n ");
-		GetFruitDetailsDao fruitDetails  =  context.getBean("fruitDAO", GetFruitDetailsDao.class);
-		fruitDetails.getFruitDetails();
-		
+		serviceImpl.getFruitPrice();
 
 	}
 
