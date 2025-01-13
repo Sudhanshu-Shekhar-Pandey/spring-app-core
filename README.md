@@ -176,6 +176,38 @@ To remove bean tag from XML we need to replace it with `@Components` annotation 
 
 
 
+## Annotation based configuration (removing xml config file) - 
+Spring can get required configuration using Java annotation and thus we can removed xml configuration file.
+ 
+A configuration class in spring should be annotated with `@Configuration`. For package scanning `@ComponentScan(basePackages = "abc")` should be used.
+
+XML equivalent -
+
+        <context:component-scan base-package="org.example", "org.services" />
+
+Annotation equivalent-  
+
+	@Configuration
+	@ComponentScan(basePackages = "org.example", "org.services")
+	public class AppConfig  {
+		// ...
+	}
+
+To create context object for beans, in main method use - 
+
+	ApplicationContext context = new AnnotationConfigApplicationContext(MyConfig.class);
+
+All beans must be annotated with `@Component` annotation. By default, bean id will be class name in camel-Case but can also be specified explicitly - 
+
+	@Component("myNewBeanName")
+
+For injecting dependency, use `@Autowired` annotation. By default, your bean id will be class name in camel-Case. 
+
+If there are multiple bean of same type, or using interface reference with more than one implementation classes; Spring will get confused about which bean object to be instantiated. 
+To specify which bean to instantiate, use 	`@Qualifier("refBeanCamelCase")`.
+
+
+
 ***
 
 # Source Code - 
@@ -280,4 +312,19 @@ To remove bean tag from XML we need to replace it with `@Components` annotation 
 			PriceService priceService;
     42. Reference bean should also be made component using @Component. 
     43. ## Run the Application -------> 
+
+
+<br>
+
+**Steps to use annotation based configuration -**   
+	1. Delete xml config file. Instead we will create java Config class to9 be used by SpringIOC for bean creation.   
+	2. Create a configuration `SpringConfig.class` which will have `@Configuration` annotation.  
+	3. For component scanning use annotation - `@ComponentScan(basePackages = "sud.learn.dao")`  
+	4. Mark all the beans with `@Component` annotation. This is equivalent to creating `<bean>` tag in xml. Instead of default bean name as className in camelCase, we can explicitly define name as `@Component("fruitDetailsDao")`.  
+	5. Add `@Autowired` for reference variable to inject dependency. Use this on reference variable.  
+	6. Use `@Qualifier("getPostGresConnection")` to specify which bean to instantiate in case of multiple bean of same type found, or using interface reference having multiple implementation class.   
+	7. ## Run the Application ------->  
+	8. 
+ 
+ 
     

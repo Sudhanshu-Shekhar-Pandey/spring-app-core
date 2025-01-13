@@ -1,5 +1,8 @@
 package sud.learn.dao;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class GetPostGresConnection implements GetDBConnections {
 
 	@Override
