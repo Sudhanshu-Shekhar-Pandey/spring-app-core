@@ -4,12 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-@Component("fruitDetailsDao")
+//@Component("getFruitDetailsDao")
 public class GetFruitDetailsDao {
 
 	@Autowired
 //	@Qualifier("getMySQLConnection")	
-	@Qualifier("getPostGresConnection")
+//	@Qualifier("getPostGresConnection")
 	GetDBConnections getDBConnections;
 	
 
